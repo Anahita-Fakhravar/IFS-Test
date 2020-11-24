@@ -1,13 +1,15 @@
 //HomeScreen.js
 import React, { useEffect, useState, useRef } from 'react';
-import { SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, Platform, SafeAreaView, View } from 'react-native';
 import io from 'socket.io-client';
 import { GiftedChat } from 'react-native-gifted-chat'
+import LoginScreen from '../login/LoginScreen';
 
 
 const HomeScreen = () => {
 
   const [recvMessages, setRecvMessages] = useState([])
+  const [hasJoined, setHasJoined] = useState(false)
   const socket = useRef(null)
 
   useEffect(() => {
@@ -22,15 +24,27 @@ const HomeScreen = () => {
     setRecvMessages(prevState => GiftedChat.append(prevState, messages))
   }
 
-  return (
+  const joinChat = username => {
+    socket.current.emit('join', username)
+    setHasJoined(true)
+  }
 
-    <GiftedChat
-      messages={recvMessages}
-      onSend={messages => onSend(messages)}
-      user={{
-        _id: 1,
-      }}
-    />
+  return (
+    <View style={{ flex: 1 }}>
+      {
+        hasJoined ?
+          <GiftedChat
+            renderUsernameOnMessage
+            messages={recvMessages}
+            onSend={messages => onSend(messages)}
+            user={{
+              _id: 1,
+            }}
+          /> : <LoginScreen joinChat={joinChat} />
+      }
+
+    </View>
+
   )
 }
 

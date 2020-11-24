@@ -1,32 +1,17 @@
+//Create server 
 const io = require('socket.io')();
+const messageHandler = require('./handlers/message.handler')
 
 let currentUserId = 2;
-let currentMessageId = 1;
-const userIds = {}
-
-function createMessage(userId, messageText) {
-    return {
-        _id: currentMessageId++,
-        text: messageText,
-        createdAt: new Date(),
-        user: {
-            _id: userId,
-            name: 'Anahita',
-            avatar: 'https://placeimg.com/140/140/any',
-        }
-    }
-
-}
+const users = {}
 
 io.on('connection', socket => {
     console.log('as user connected!')
     console.log(socket.id)
-    userIds[socket.id] = currentUserId++;
-    socket.on('message', messageText => {
-        const userId = userIds[socket.id];
-        const message = createMessage(userId, messageText)
-        console.log(message)
-        socket.broadcast.emit("message", message)
+    users[socket.id] = { userId: currentUserId++ };
+    socket.on("join", username => {
+        users[socket.id].username = username;
+        messageHandler.handleMessage(socket, users)
     })
 })
 io.listen(3001);
