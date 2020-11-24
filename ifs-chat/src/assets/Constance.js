@@ -1,0 +1,1 @@
+export const chatLogo = require('./images/chatLogo.png');
