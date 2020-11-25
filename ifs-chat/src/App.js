@@ -20,7 +20,7 @@ function App() {
     );
 
     Object.keys(ScreenR).forEach(function (key) {
-        Navigation.registerComponent(key, () => wrapWithProviders(ScreenR[key]),
+        Navigation.registerComponentWithRedux(key, () => wrapWithProviders(ScreenR[key]),
             Provider, store);
     });
 }
