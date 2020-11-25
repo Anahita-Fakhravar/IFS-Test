@@ -3,17 +3,22 @@ import React, { useEffect, useState, useRef } from 'react';
 import { KeyboardAvoidingView, Platform, SafeAreaView, View } from 'react-native';
 import io from 'socket.io-client';
 import { GiftedChat } from 'react-native-gifted-chat'
-import LoginScreen from '../login/LoginScreen';
+import { useSelector } from 'react-redux';
 
 
 const HomeScreen = () => {
 
   const [recvMessages, setRecvMessages] = useState([])
-  const [hasJoined, setHasJoined] = useState(false)
+  const loginData = useSelector(state => state.LoginReducer)
   const socket = useRef(null)
+
+  console.log('loginData',loginData)
+
+  // socket.current.emit('join', loginData.username)
 
   useEffect(() => {
     socket.current = io("http://192.168.56.1:3001")
+    socket.current.emit('join', loginData.username)
     socket.current.on("message", message => {
       setRecvMessages(prevState => GiftedChat.append(prevState, message));
     })
@@ -24,27 +29,16 @@ const HomeScreen = () => {
     setRecvMessages(prevState => GiftedChat.append(prevState, messages))
   }
 
-  const joinChat = username => {
-    socket.current.emit('join', username)
-    setHasJoined(true)
-  }
-
   return (
-    <View style={{ flex: 1 }}>
-      {
-        hasJoined ?
-          <GiftedChat
-            renderUsernameOnMessage
-            messages={recvMessages}
-            onSend={messages => onSend(messages)}
-            user={{
-              _id: 1,
-            }}
-          /> : <LoginScreen joinChat={joinChat} />
-      }
 
-    </View>
-
+    <GiftedChat
+      renderUsernameOnMessage
+      messages={recvMessages}
+      onSend={messages => onSend(messages)}
+      user={{
+        _id: 1,
+      }}
+    />
   )
 }
 
