@@ -1,14 +1,36 @@
 //Design join screen
 
 import React, { useState } from 'react';
-import { SafeAreaView, Button, View, Image, TextInput, KeyboardAvoidingView, Platform, ShadowPropTypesIOS } from 'react-native';
+
+import {
+    SafeAreaView,
+    Button,
+    View,
+    Image,
+    TextInput,
+    KeyboardAvoidingView,
+    Platform,
+    ShadowPropTypesIOS,
+    Alert
+} from 'react-native';
 import { chatLogo } from '../../assets/Constance';
 import { Strings } from '../../assets/Strings';
 import { LoginStyles } from './LoginStyles';
+import { useDispatch } from 'react-redux';
+import { saveLoginInfo } from './../../redux/reducers/LoginReducer';
+import { pushToScreen } from './../../functions/MyNavigation';
+import { ScreensName } from '../../ScreensName';
 
-const LoginScreen = ({ joinChat }) => {
+const LoginScreen = (Props) => {
 
-    const [username, setUsername] = useState('')
+    const dispatch = useDispatch();
+    const [username, setUsername] = useState('');
+
+    function _JoinChat() {
+        Promise.all([dispatch(saveLoginInfo({ username: username })),
+        pushToScreen(Props.componentId, ScreensName.HomeScreen, null, null)
+        ]).then(function () { }).catch(error => error);
+    }
 
     return (
         <SafeAreaView style={LoginStyles.mainContainer}>
@@ -20,7 +42,7 @@ const LoginScreen = ({ joinChat }) => {
                     placeholder={Strings.enterUsername}
                     onChangeText={(name) => setUsername(name)}
                 />
-                <Button title={Strings.joinChat} onPress={() => joinChat(username)} />
+                <Button title={Strings.joinChat} onPress={() => username !== '' ? _JoinChat() : Alert.alert('Please enter your name')} />
             </View>
             {Platform.OS === "ios" && <KeyboardAvoidingView behavior="padding" />}
         </SafeAreaView>
