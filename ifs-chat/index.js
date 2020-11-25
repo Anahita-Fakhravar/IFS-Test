@@ -2,9 +2,33 @@
  * @format
  */
 
-import {AppRegistry} from 'react-native';
-import HomeScreen from './src/screens/home/HomeScreen';
+import { Navigation } from "react-native-navigation";
+import { App } from './src/App';
+import { ScreensName } from "./src/ScreensName";
 
-import {name as appName} from './app.json';
+App();
 
-AppRegistry.registerComponent(appName, () => HomeScreen);
+Navigation.events().registerAppLaunchedListener(() => {
+   Navigation.setRoot({
+     root: {
+       stack: {
+         children: [
+           {
+             component: {
+               name: ScreensName.LoginScreen,
+               options: {
+                topBar: {
+                    visible: false,
+                    height: 0,
+                },
+                layout: {
+                    orientation: ['portrait'],
+                },
+            },
+             }
+           }
+         ]
+       }
+     }
+  });
+});
