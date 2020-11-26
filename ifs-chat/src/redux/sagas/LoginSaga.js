@@ -1,7 +1,7 @@
 //login Saga
 
-import { all, delay, put, takeLatest, call } from 'redux-saga/effects';
-import { saveLoginInfo ,saveLoginInfoSuccess} from '../reducers/LoginReducer.js';
+import { put, takeLatest } from 'redux-saga/effects';
+import { saveLoginInfo, saveLoginInfoSuccess } from '../reducers/LoginReducer.js';
 
 const saveInfo = function* ({ payload }) {
 
@@ -10,14 +10,9 @@ const saveInfo = function* ({ payload }) {
             username: payload.username,
         }, type: saveLoginInfoSuccess.type,
     });
-      
+
 };
 
 export function* saveLoginInfoWatcher() {
     yield takeLatest(saveLoginInfo.type, saveInfo);
 }
-
-/* export function* saveLoginInfoSagas() {
-    yield all([call(saveLoginInfoWatcher)]);
-}
- */

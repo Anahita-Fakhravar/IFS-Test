@@ -10,7 +10,7 @@ const SaveLoginInfoSlice = createSlice({
     initialState,
     reducers: {
         saveLoginInfo(state) {
-            state.username = false;
+            state.username = '';
         },
         saveLoginInfoSuccess(state, action) {
             state.username = action.payload.username;
