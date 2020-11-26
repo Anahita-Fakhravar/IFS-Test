@@ -1,7 +1,6 @@
-//Design join screen
+//Design login screen.
 
 import React, { useState } from 'react';
-
 import {
     SafeAreaView,
     Button,
@@ -26,10 +25,11 @@ const LoginScreen = (Props) => {
     const dispatch = useDispatch();
     const [username, setUsername] = useState('');
 
+    //Save user name in redux store and then navigate to next page
     function _JoinChat() {
         Promise.all([dispatch(saveLoginInfo({ username: username })),
         pushToScreen(Props.componentId, ScreensName.HomeScreen, null, null)
-        ]).then(function () { }).catch(error => error);
+        ]).then(function () {}).catch(error => error);
     }
 
     return (
@@ -42,7 +42,7 @@ const LoginScreen = (Props) => {
                     placeholder={Strings.enterUsername}
                     onChangeText={(name) => setUsername(name)}
                 />
-                <Button title={Strings.joinChat} onPress={() => username !== '' ? _JoinChat() : Alert.alert('Please enter your name')} />
+                <Button title={Strings.joinChat} onPress={() => username !== '' ? _JoinChat() : Alert.alert(Strings.enterNameAlert)} />
             </View>
             {Platform.OS === "ios" && <KeyboardAvoidingView behavior="padding" />}
         </SafeAreaView>

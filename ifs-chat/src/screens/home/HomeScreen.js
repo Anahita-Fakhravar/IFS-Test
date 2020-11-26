@@ -14,8 +14,6 @@ const HomeScreen = () => {
 
   console.log('loginData',loginData)
 
-  // socket.current.emit('join', loginData.username)
-
   useEffect(() => {
     socket.current = io("http://192.168.120.133:3001")
     socket.current.emit('join', loginData.username)
@@ -30,7 +28,6 @@ const HomeScreen = () => {
   }
 
   return (
-
     <GiftedChat
       renderUsernameOnMessage
       messages={recvMessages}
