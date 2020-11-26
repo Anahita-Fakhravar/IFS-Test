@@ -15,6 +15,7 @@ const HomeScreen = () => {
   console.log('loginData',loginData)
 
   useEffect(() => {
+    //The 192.168.56.1 must change according to user network Ip
     socket.current = io("http://192.168.56.1:3001")
     socket.current.emit('join', loginData.username)
     socket.current.on("message", message => {
