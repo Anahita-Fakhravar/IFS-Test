@@ -15,7 +15,7 @@ const HomeScreen = () => {
   console.log('loginData',loginData)
 
   useEffect(() => {
-    socket.current = io("http://192.168.120.133:3001")
+    socket.current = io("http://192.168.56.1:3001")
     socket.current.emit('join', loginData.username)
     socket.current.on("message", message => {
       setRecvMessages(prevState => GiftedChat.append(prevState, message));
